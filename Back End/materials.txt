@@ -1,0 +1,3 @@
+Poulty, Chicken, Georgia (ODA)+chicken+ODA/PPOULT_USD+yes+lb
+Copper, LME+copper+LME/PR_CU+no+mt
+Iron Ore, Tianjin (ODA)+iron ore+ODA/PIORECR_USD+no+mt
