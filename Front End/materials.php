@@ -1,3 +1,8 @@
+<?php
+	if(!isset($_GET['product'])){
+                echo "<meta http-equiv='refresh' content='0;URL=product.php' />";
+        }
+?>
 <html>
 <body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -32,14 +37,14 @@
 <br></br>
 <center>
 <div class="card bg-primary" style="width: 50rem;">
-
-<div class="h1 card-title">Item: Tire</div>
+<br>
+<div class="h1 card-title">Item: <?php echo $_GET["product"];?></div>
 
 <br> 
 
 <!DOCTYPE html>
-<html>
-<head>
+<!-- <html>
+<head> -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
         *{
@@ -63,47 +68,11 @@
                 clear: both;
         }
         </style>
-</head>
-<body>
 
-<div class="row">
-        <div class="column" style="background-color:#fff;">
-                <h2>Materials</h2>
-      		<?php
-		        //Attempt database connection
-        		try
-        		{
-                		$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
-
-        		}
-
-        		catch(Exception $e)
-        		{
-                		echo 'Message: ' .$e->getMessage();
-        		}
-
-        		$result = pg_query("SELECT name FROM mtire;");
-
-        		while ($row = pg_fetch_array($result))
-        		{
-                		echo $row[0]."</br>";
-        		}
-
-        		pg_close($db_connect);
-
-		?>
-                </div>
-        <div class="column" style="background-color:#fff;">
-                <h2>Price/Unit</h2>
-                <p>Some text..</p>
-                </div>
-        <div class="column" style="background-color:#fff;">
-                <h2>Weight</h2>
-                <?php
-               		//Attempt database connection
-                	try
-                      	{
-                        	$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
+<?php
+	 try
+                        {
+                                $db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
 
                         }
 
@@ -111,52 +80,65 @@
                         {
                                 echo 'Message: ' .$e->getMessage();
                         }
+?>
 
-                        $result = pg_query("SELECT unitweight FROM mtire;");
+<div class='card-deck' style='width: 95%'>
+        <div class="card" style="background-color:silver;">
+                <h2>Materials</h2>
+      		<?php
+			$result = pg_query("SELECT materialstable FROM products WHERE name = '" . $_GET["product"] . "';");
+			$materialtable = pg_fetch_array($result);
+
+			$result = pg_query("SELECT name FROM " . $materialtable[0] . ";");
+
+        		while ($row = pg_fetch_array($result))
+        		{
+                		echo $row[0]."</br>";
+        		}
+		?>
+                </div>
+	<div class="card" style="background-color:silver;">
+                <h2>Price</h2>
+                $/lb<br>
+                $/mt<br>
+                $/lb<br>
+                $/lb<br>
+                </div>
+        <div class="card" style="background-color:silver;">
+                <h2>Weight</h2>
+                <?php
+                        $result = pg_query("SELECT unitweight FROM " . $materialtable[0] . ";");
 
                         while ($row = pg_fetch_array($result))
                         {
                                 echo $row[0]."</br>";
                         }
-
-                        pg_close($db_connect);
-
                 ?>
 
                 </div>
+	<div class="card" style="background-color:silver;">
+                <h2>Unit Price</h2>
+                3483.37<br>
+                2397.39<br>
+                3638.28<br>
+                3823.38<br>
+                </div>
 </div>
-
+<br>
         <h2>Total</h2>
 	<?php
-
-	        //Attempt database connection
-                try
-                {
-        	        $db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
-                }
-
-                catch(Exception $e)
-                {
-                	echo 'Message: ' .$e->getMessage();
-            	}
-
 		$total = pg_query("SELECT SUM(unitprice) FROM mtire;");
-		
-		while ($total2 = pg_fetch_array($total))
-		{
-			echo $total2[0]."</br>";
-		}
-        	pg_close($db_connect);
+
+                 while ($row = pg_fetch_array($total))
+                 {
+	                 echo $row[0]."</br>";
+                 }
+
+                 pg_close($db_connect);
 
 	?>
-
-
-</body>
-</html>
-
-
+<br>
 </div>
-</center>
-
 </body>
 </html>
+

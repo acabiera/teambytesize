@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html>
 <body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -12,22 +13,28 @@ require 'vendor/autoload.php';
 
 use scservice\SCConnect as Connect;
 
-if(isset($_COOKIE['SCServiceUser'])) {
+if(isset($_SESSION['username'])) {
     $loggedIn = true;
-    echo $_COOKIE['SCServiceUser'];
+    echo $_SESSION['username'];
 }
 else {
     echo 'User Name';
 }
 ?>
+
+<body style='background-color:silver'>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 <div class="navbar-nav">
-<a class="nav-item nav-link" href="#">Recent Searches</a>
-<a class="nav-item nav-link" href="#">Add Product</a>
-<a class="nav-item nav-link" href="#">Logout</a>
+<!--
+	<a class="nav-item nav-link" href="#">Recent Searches</a>
+	<a class="nav-item nav-link" href="#">Add Product</a>
+	<a class="nav-item nav-link" href="#">Add Product</a>
+	<a class="nav-item nav-link" href="#">Products</a>
+	<a class="nav-item nav-link" href="#">Logout</a>
+-->
 </div>
 </div>
 </nav>
@@ -82,7 +89,11 @@ try{
             $stm2->execute([':username'=>$username]);
             
             //set a cookie
-            setcookie('SCServiceUser', $username, time() + 86400, "/");
+            //setcookie('SCServiceUser', $username, time() + 86400, "/");
+            //start a session?
+            $_SESSION['valid'] = true;
+            $_SESSION['last_used'] = time();
+            $_SESSION['username'] = $username;
          }
          else { //error
             echo 'Passwords do not match<br>';
@@ -92,6 +103,8 @@ try{
     echo $e->getMessage();
 
 }
+var_dump($_POST);
+var_dump($_SESSION);
 ?>
 </div>
 </center>

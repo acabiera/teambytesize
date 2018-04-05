@@ -1,3 +1,4 @@
+<body style='background-color:silver'>
 <html>
 <body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -32,10 +33,12 @@
 <br></br>
 <center>
 <div class="card bg-primary" style="width: 50rem;">
+<br>
 <div class="h1 card-title">Products</div>
 
 <br> 
 
+	<div class="card-subtitle mb-2">Select a product for should cost analysis: </div>
 
 <!DOCTYPE html>
 <html>
@@ -66,17 +69,16 @@
 </head>
 <body>
 
-<div class="row">
-	<div class="column" style="background-color:#fff;">
+
 	<?php
 		//Attempt database connection
         	try
         	{
                 	$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
-                	if($db_connect)
-                	{
-                        	echo "Select a product for should cost analysis:<p><br/>";
-                	}
+                	//if($db_connect)
+                	//{
+                        //	echo "Select a product for should cost analysis:<p><br/>";
+                	//}
         	}
         	catch(Exception $e)
         	{
@@ -87,16 +89,14 @@
 
         	while ($row = pg_fetch_array($result))
         	{
-			$link = 'materials.php';
-                	echo "<a href='$link'>$row[0]</a>"."</br>";
-        	}
+        		$link = 'materials.php?product=' . $row[0];
+			echo "<a href = $link> <button type='button' style = 'width:50%' class='border btn btn-primary border-dark text-dark'>" . str_ireplace('_', ' ', $row[0]) . "</button></a>";
+			echo "<br>";
+		} 
 
         	pg_close($db_connect);
 	?>
 
-   	</div>
-
-</div>
 </div>
 </center>
 
