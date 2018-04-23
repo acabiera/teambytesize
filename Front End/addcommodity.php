@@ -63,109 +63,41 @@ echo $_SESSION['username'];
 	<body style='background-color:silver'>
 		<div class="card bg-primary" style="width: 50rem;">
 		<br/>
-		<div class="h1 card-title">Add Product</div>
+		<div class="h1 card-title">Add Commodity</div>
 		<form name="newproduct" action="addproduct.php" autocomplete="off" method="POST" class="card-body">
 			<div id="productDetails" class="form-group">
-	    		<input type="text" class="form-control" name="productname" placeholder="Enter Product Name" required/>
+			<input type="text" class="form-control" name="commodity" style="width:50%;float:left;" placeholder="Commodity Name"required/>
+			<input type="number" min="0" step="0.01" class="form-control" name="price" style="width:24%;float:left; margin-left:1%;" placeholder="Price in USD"required/>	
+			<input type="text" class="form-control" name="unit" style="width:24%;float:left; margin-left:1%;" placeholder="Weight Unit"required/>
 				<br>
-				<script language="javascript">
-
-					var commodityCount = 0;
-
-					//Adds a new commodity field to the form
-					function addCommodity() {
-						commodityCount++; //increment counter for new id
-						
-						//Add an input field for the commodity name
-						var html = '<input type="text" class="form-control" name="commodities[]" style="width:25%;float:left;" placeholder="Commodity Name"required/>'
-
-						//Add an input field for the commodity price
-						html += '<input type="number" min="0" step="0.01" class="form-control" name="prices[]" style="width:20%;float:left; margin-left:1%;" placeholder="Price in USD"required/>';
-
-						//Add an input field for the commodity unit
-						html += '<input type="text" class="form-control" name="units[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight Unit"required/>';
-
-						//Add an input field for the commodity weight
-						html += '<input type="number" min="0" step="0.01" class="form-control" name="weights[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight"required/>';
-			
-						//Add a button to remove the commodity info 
-						html += '<button type="button" class="border btn btn-primary border-dark text-dark" onclick="removeElement(this.parentNode)" style="float:right">Remove</button>'
-
-						//Add a div to create space below each new commodity 
-						html += '<div style="clear:both;"><br></div>';
-						
-						addElement("productDetails", "div", "commodity-" + commodityCount, html);
-                    }
-
-					//function to add a new html element
-					function addElement(parent, tag, id, html) {
-						var setParent = document.getElementById(parent);
-						var newElement = document.createElement(tag);
-						newElement.setAttribute("id", id);
-						newElement.innerHTML = html;
-						setParent.appendChild(newElement);
-					}
-
-					//Remove element from its parent node
-					function removeElement(element){
-						element.parentNode.removeChild(element);
-					}
-
-					//Variable for storing commodities that aren't updated in commodity table
-					var cUnchanged = "";
-				</script>
 	 		 </div>
+			<br>
 			<div id="buttonContainer">
-				<button type="button" class="border btn btn-primary border-dark text-dark" onclick="addCommodity()">Add Commodity</button>
 	  			<button type="submit" class="border btn btn-primary border-dark text-dark">Submit</button>
 			</div>
 		</form>
 		<?php
 			//Confirm that a product name was given in form submission
 			if(isset($_POST["productname"])) {
-				$name = $_POST["productname"];
+				$commodity = $_POST["commodity"];
+				$price = $_POST["price"];
+				$unit = $_POST["unit"];
 				//Attempt database connection
 				try{
 	    			$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
  					if($db_connect){
 						//Perform query to see if product already exists
-	   					$productReturn = pg_query($db_connect, "SELECT * FROM Products WHERE LOWER(name) = LOWER('{$name}')");
+	   					$productReturn = pg_query($db_connect, "SELECT * FROM commodities WHERE LOWER(name) = LOWER('{$commodity}')");
 						
 						//If the product doesn't exist, create a new one
 						if(pg_num_rows($productReturn) == 0) {
 
 							//Create new product entry in products table
-							$productsInsert = pg_query($db_connect, "INSERT INTO Products VALUES (uuid_generate_v4(), '{$name}')");
+							$productsInsert = pg_query($db_connect, "INSERT INTO commodities VALUES (uuid_generate_v4(), '{$commodity}', '{$unit}', '{$price}')");
 							
 							//Free Memory from insertion
 							pg_free_result($productsInsert);
 					
-							//Confirm that a commodity name was given in form submission
-							if(isset($_POST["commodities"])){
-								
-								$i = 0;	
-								//Insert commodity values into composition
-								foreach($_POST["commodities"] as $commodity){
-									
-									$commodityReturn = pg_query($db_connect, "SELECT * FROM Commodities WHERE LOWER(name) = LOWER('{$commodity}')");
-									if(pg_num_rows($commodityReturn) == 0){
-										$insertCommodity = pg_query($db_connect, "INSERT INTO commodities VALUES (uuid_generate_v4(), '{$commodity}','{$_POST["units"][$i]}', '{$_POST["prices"][$i]}');");
-
-									//Free memory
-									pg_free_result($insertCommodity);
-									}
-									else {
-										//Store unchanged commodites in string variable
-										echo "<script language='javascript'> cUnchanged+= ' ' + " . json_encode($commodity) . "; </script>";
-									}
-									
-									$insertValues = pg_query($db_connect, "INSERT INTO composition VALUES (uuid_generate_v4(), '{$name}','{$commodity}', '{$_POST["weights"][$i]}');");
-
-									//Free memory
-									pg_free_result($insertValues);
-									$i++;
-								}
-							}
 							//Alert user to completed product addition
 							echo "<script type='text/javascript'>alert('product succesfully added');</script>";
 						}
@@ -195,5 +127,3 @@ echo $_SESSION['username'];
 	}
 </script>
 </html>
-
-
