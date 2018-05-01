@@ -28,12 +28,42 @@ $(document).ready(function(){
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<title>Add Commodity</title>
+<title>Commodity Information</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-
 <?php
 echo $_SESSION['username'];
+
+        //Query database and store product names in an array
+        $db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
+
+        //Continue if connection established    
+        if($db_connect){
+                //Return product query results
+				$commodity = $_GET['commoditysearch'];
+                $priceQuery = pg_query($db_connect, "SELECT price, unit FROM commodities WHERE name = '$commodity';");
+
+				if (pg_num_rows($priceQuery) == 0) {
+				$_SESSION['noterm']=true;
+                                $_SESSION['incorrectterm'] = $term;
+				header("Location: searchcommodity.php");
+				exit();
+                        }
+			else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
+				$addRecent = pg_query("INSERT INTO search_history VALUES (uuid_generate_v4(), '"  .  $_SESSION["username"] . "', '" . $commodity . "','commodity', now());"); 
+				pg_free_result($addRecent);
+
+				//Reset valid search flag to prevent duplicate insertions
+				$_SESSION['issearch'] = false;
+			}
+
+                //Store query results in array
+                $price = pg_fetch_array($priceQuery);
+
+                //Free memory
+                pg_free_result($priceQuery);
+        }
 ?>
+
 
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,72 +102,64 @@ echo $_SESSION['username'];
     </div>
   </div>
 </nav>
-<br></br>
+<br>
 <center>
 	<body style='background-color:silver'>
-		<div class="card bg-primary" style="width: 50rem;">
-		<br/>
-		<div class="h1 card-title">Add Commodity</div>
-		<form name="newproduct" action="addcommodity.php" autocomplete="off" method="POST" class="card-body">
-			<div id="productDetails" class="form-group">
-			<input type="text" class="form-control" name="commodity" style="width:50%;float:left;" placeholder="Commodity Name"required/>
-			<input type="number" min="0" step="0.01" class="form-control" name="price" style="width:24%;float:left; margin-left:1%;" placeholder="Price in USD"required/>	
-			<input type="text" onkeydown="preventNumberInput(event)" onkeyup="preventNumberInput(event)" class="form-control" name="unit" style="width:24%;float:left; margin-left:1%;" placeholder="Weight Unit"required/>
-				<br>
-	 		 </div>
-			<br>
-			<div id="buttonContainer">
-	  			<button type="submit" class="border btn btn-primary border-dark text-dark">Submit</button>
+		<div class="card bg-primary" style="width: 50rem;">        	
+		   	<br>
+			<!--display edit button inline with the header-->
+			<div style="position:relative;">
+				<h1 style="display:inline; width:fit-content;">Commodity: 
+					<?php 
+						echo ucwords($commodity); 
+					?>
+				</h1>
+				<?php
+					//Create edit button to send user to editcommodity page
+					//echo '<a class="text-dark" style="position:absolute; margin-left: 1%; bottom: 2; display:inline; width:fit-content;href="editcommodity.php?commodity='.$commodity.'">Edit</a>';
+				?>
 			</div>
-		</form>
-		<?php
-			//Confirm that a product name was given in form submission
-			if(isset($_POST["commodity"])) {
-				$commodity = $_POST["commodity"];
-				$price = $_POST["price"];
-				$unit = $_POST["unit"];
-				//Attempt database connection
-				try{
-	    			$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
- 					if($db_connect){
-						//Perform query to see if product already exists
-	   					$productReturn = pg_query($db_connect, "SELECT * FROM commodities WHERE LOWER(name) = LOWER('{$commodity}')");
-						
-						//If the product doesn't exist, create a new one
-						if(pg_num_rows($productReturn) == 0) {
-
-							//Create new product entry in products table
-							$productsInsert = pg_query($db_connect, "INSERT INTO commodities VALUES (uuid_generate_v4(), '{$commodity}', '{$unit}', '{$price}')");
-							
-							//Free Memory from insertion
-							pg_free_result($productsInsert);
-					
-							//Alert user to completed product addition
-							echo "<script type='text/javascript'>alert('commodity succesfully added');</script>";
-						}
-						else {
-							//Alert user to attempts to duplicate already existing product
-							echo "<script type='text/javascript'>alert('commodity already exists');</script>";
-						
-							//Free memory from initial query
-							pg_free_result($productReturn);
-						}
-
-						//Close database connection
-						pg_close($db_connect);
+			<br>
+			<div class="card" style="background-color: silver; width: 90%; margin:auto; font-size: 20px;">
+				<h3>Market Price</h3> 
+				<?php 
+					//If a price is available, print it to the screen
+					if(!empty($price[0]))
+					{
+						echo "$".$price[0].'/'.$price[1];
 					}
-   				} 
-				catch(Exception $e) {
-        			echo 'Message: ' .$e->getMessage();
-				}
-			}
-		?>
+					else 
+					{
+						echo "Pricing Unavailable";
+					}
+				?>
+			</div>  
+			<br>
+			<div class="card" style="background-color: silver; width: 90%; margin:auto; font-size: 20px;">
+				<h3>Product's Using This Commodity</h3>
+				<?php
+					//Return products that contain the given commodity
+		    		$result = pg_query("SELECT product FROM composition WHERE commodity = '" .  $commodity . "' ORDER BY commodity;");
+
+					//Print product names
+					$row = pg_fetch_all($result);
+					if(!empty($row))
+					{
+						foreach($row as $prodName)
+						{
+							$print = $prodName['product'];
+							echo "<a style='width:fit-content' href='materials.php?product={$print}'>$print</a>";
+						}
+					}
+					else
+					{
+						echo "This commodity has no products";
+					}
+				?>
+		 	
+			</div>
+			<br>
 		</div>
 	</body>
 </center>
-<script language="javascript">
-	if(cUnchanged.length !== 0) {
-		alert("The following commodity prices and weights were not changed as they already exist in the database:\n" + cUnchanged);
-	}
-</script>
 </html>

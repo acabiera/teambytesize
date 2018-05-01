@@ -14,7 +14,7 @@ if (!isset($_SESSION['valid'])){
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<title>Capstone Template (Should-Cost)</title>
+<title>Add Product</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 
 <?php
@@ -123,7 +123,7 @@ echo $_SESSION['username'];
 		<?php
 			//Confirm that a product name was given in form submission
 			if(isset($_POST["productname"])) {
-				$name = $_POST["productname"];
+				$name = strtolower($_POST["productname"]);
 				//Attempt database connection
 				try{
 	    			$db_connect = pg_connect('host=localhost dbname=scservice user=scservice password=Uark1234');
@@ -147,7 +147,7 @@ echo $_SESSION['username'];
 								//Insert commodity values into composition
 								foreach($_POST["commodities"] as $commodity){
 									
-									$commodityReturn = pg_query($db_connect, "SELECT * FROM Commodities WHERE LOWER(name) = LOWER('{$commodity}')");
+									$commodityReturn = pg_query($db_connect, "SELECT * FROM commodities WHERE LOWER(name) = LOWER('{$commodity}')");
 									if(pg_num_rows($commodityReturn) == 0){
 										$insertCommodity = pg_query($db_connect, "INSERT INTO commodities VALUES (uuid_generate_v4(), '{$commodity}','{$_POST["units"][$i]}', '{$_POST["prices"][$i]}');");
 

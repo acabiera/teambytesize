@@ -5,6 +5,9 @@ use scservice\SCConnect as Connect;
 
 session_start();
 
+//Set flag to disable following link from counting as searches
+$_SESSION['issearch'] = false;
+
 $results = false;
 
 if (!(isset($_SESSION['valid']))){
@@ -17,7 +20,7 @@ try{
 
  	if($db_connect){
 		//Run query to return search information
-		$searchReturn = pg_query($db_connect, "SELECT search, search_time FROM search_history WHERE username = '{$_SESSION['username']}' ORDER BY search_time DESC LIMIT 5");
+		$searchReturn = pg_query($db_connect, "SELECT search, search_time, type FROM search_history WHERE username = '{$_SESSION['username']}' ORDER BY search_time DESC LIMIT 5");
 
 		//Store array of query values
 		$searchHistory = pg_fetch_all($searchReturn);
@@ -38,7 +41,7 @@ catch (Exception $e){
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<title>Capstone Template (Should-Cost)</title>
+<title>Recent Searches</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 
 <?php
@@ -87,8 +90,10 @@ echo $_SESSION['username'];
 <br>
 <div class="h1 card-title">Recent Searches</div>
 <p>These are your last five searches:</p>
-<div id="headerContainer" style="width:90%;">
-	<div style="background-color:silver; width:45%; margin-left:5%; float:left;">
+<div id="headerContainer" style="width:70%; margin:auto;">
+	
+<!-- Search Time -->
+       <div class="card" style="background-color:silver; width:30%; margin-left:3%; margin-right: 2%; float:left;">
 		<h3>Search Time</h3>
 		<?php 
 			if(!empty($searchHistory)) {			
@@ -103,16 +108,41 @@ echo $_SESSION['username'];
 			}		
 		?>
 	</div>
-	<div style="background-color:silver; width:45%; margin-right:5%; float:right;">
-		<h3>Product Name</h3>
+
+<!-- Type -->
+        <div class="card" style="background-color:silver; width:30%; float:left;">
+                <h3>Type</h3>
+                <?php
+                        if(!empty($searchHistory)) {
+                                //Print out item names as links
+                                foreach($searchHistory as $type) {
+                                        echo $type['type'];
+                                        echo "<br>";
+                                }
+                        }
+                        else {
+                                echo "no data";
+                        }
+                ?>
+        </div>
+
+<!-- Searched -->
+	<div class="card" style="background-color:silver; width:30%; margin-left: 2%; margin-right:3%; float:left;">
+		<h3>Searched</h3>
 		<?php 
 			if(!empty($searchHistory)) {
 				//Print out item names as links
 				foreach($searchHistory as $name) {
 					$param = str_replace(' ', '%20', $name['search']); //Had to encode spaces here to allow passing to url
-					$link = "materials.php?product={$param}";
-					echo "<a href = $link>{$name['search']}</a>";
-					echo "<br>";
+					//Set separate links for product and commodity types
+					if($name['type'] == 'product') {
+						$link = "materials.php?product={$param}";
+					}
+					else
+					{
+						$link = "commodityInfo.php?commoditysearch={$param}";
+					}
+					echo "<a style='width:fit-content' href = $link>{$name['search']}</a>";
 				} 
 			}
 			else {
@@ -120,6 +150,8 @@ echo $_SESSION['username'];
 			}
 		?>
 	</div>
+
+
 </div>
 <br>
 </center>

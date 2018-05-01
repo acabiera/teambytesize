@@ -14,7 +14,7 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<title>Should-Cost Analysis: Product</title>
+<title>Product Search</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 <?php
 	//I don't actually need this if statement, but I'll keep it for now.
@@ -80,22 +80,22 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 <center>
 <div class="card bg-primary" style="width: 50rem;">
 <br>
-<div class="h1 card-title">Should-Cost Analysis: Product Page</div>
+<div class="h1 card-title">Product Search</div>
 
 <div class="card-body">
-<P>Welcome to Should-Cost Analysis!
-<br>
-Search for the product you want below.
+Search for the product below to view its should-cost total.
 <br>
 <?php
-   // echo "Search for the product you want below.";
+   //Set flag to enable searches to be stored in the database
+	$_SESSION['issearch'] = true;
 
 if (isset($_SESSION['noterm'])){
     if ($_SESSION['noterm']){
         echo "<script type='text/javascript'>alert('Your search product is not in the database, please add the product or retry.');</script>";
-		
+	//echo $_SESSION['incorrectterm'];	
 		//Reset flag to false after it returns the message
-		$_SESSION['noterm'] = false;
+		unset($_SESSION['noterm']);
+                unset($_SESSION['incorrectterm']);
     }
 }
 ?>

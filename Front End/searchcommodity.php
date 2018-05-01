@@ -14,7 +14,7 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<title>Should-Cost Analysis: Product</title>
+<title>Commodity Search</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 <?php
         //I don't actually need this if statement, but I'll keep it for now.
@@ -81,26 +81,27 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 <center>
 <div class="card bg-primary" style="width: 50rem;">
 <br>
-<div class="h1 card-title">Should-Cost Analysis: Commodity page</div>
+<div class="h1 card-title">Commodity Search</div>
 
 <div class="card-body">
-<P>Welcome to Should-Cost Analysis!
-<br>
-Search for the commodity you want below.
+<P>Search for the commodity below to view its informatiion.
 <br>
 <?php
-   // echo "Search for the product you want below.";
-if (isset($_SESSION['noterm'])){
-    if ($_SESSION['noterm']){
-        echo "<script type='text/javascript'>alert('Your search commodity is not in the database, please add the commodity or retry.');</script>";
-                
-                //Reset flag to false after it returns the message
-                $_SESSION['noterm'] = false;
-    }
-}
+	//Set flag to enable searches to be stored in the database
+	$_SESSION['issearch'] = true;
+
+	if (isset($_SESSION['noterm'])){
+		if ($_SESSION['noterm']){
+		    echo "<script type='text/javascript'>alert('Your search commodity is not in the database, please add the product or retry.');</script>";
+		//echo $_SESSION['incorrectterm'];	
+			//Reset flag to false after it returns the message
+			unset($_SESSION['noterm']);
+		            unset($_SESSION['incorrectterm']);
+		}
+	}
 ?>
 </P>
-<form action="searchcommodities.php"  autocomplete="off" method="post">
+<form action="commodityInfo.php"  autocomplete="off" method="GET">
         <input type="text" class="form-control" style="width:85%;float:left;" id ="commoditysearch" name="commoditysearch" onChange="createList()" placeholder="Enter Commodity to Search">
         <button type="submit" class="border btn btn-primary border-dark text-dark">Search</button>
         <div style="width:85%; background-color:white; clear:both; float:left;" id="completeContainer"/> 

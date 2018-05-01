@@ -9,7 +9,7 @@ if (isset($_SESSION['valid'])){
 <html>
 <body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<title>Should Cost: Login</title>
+<title>Login</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
 
 
@@ -35,7 +35,7 @@ echo 'Please Log In';
 <br></br>
 <center>
 <div class="card bg-primary" style="width: 50rem;">
-<div class="h1 card-title">Should-Cost: Login</div>
+<div class="h1 card-title">Should-Cost Login</div>
 
 
 
