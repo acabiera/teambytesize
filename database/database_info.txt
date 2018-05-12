@@ -1,0 +1,32 @@
+create table commodities 
+	(idpro bigserial PRIMARY KEY, 
+	name varchar(80) UNIQUE NOT NULL, 
+	unit varchar(10), 
+	price double precision);
+
+create table products 
+	(idpro bigserial PRIMARY KEY, 
+	name varchar(100));
+
+create table composition 
+	(idcomp bigserial PRIMARY KEY,
+	unit_weight double precision,
+	productid bigint, 
+	commodityid bigint, 
+	FOREIGN KEY (productid) REFERENCES products(idpro) on update cascade on delete cascade, 
+	FOREIGN KEY (commodityid) REFERENCES commodities(idcomm) ON UPDATE CASCADE ON DELETE CASCADE);
+
+create table user_stuff 
+	(iduser bigserial PRIMARY KEY, 
+	username varchar(100), 
+	password varchar(25), 
+	lastlogin timestamp);
+
+create table search_history 
+	(idsearch bigserial PRIMARY KEY, 
+	userid bigint, 
+	searchterm varchar(100), 
+	type varchar(20), 
+	searchtime timestamp, 
+	FOREIGN KEY (userid) REFERENCES user_stuff(iduser) ON DELETE CASCADE ON UPDATE CASCADE);
+
