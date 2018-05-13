@@ -1,1 +1,3 @@
+#should ignore database.ini and any other ini files
+
 *.ini
