@@ -48,7 +48,7 @@ $pdo = Connect::get()->connect();
    
             $result='logged_in';
             //prepare query and push timestamp
-            $stm2 = $pdo->prepare('INSERT INTO user_stuff(id,username, last_login, password) VALUES (uuid_generate_v4(), :username, now(), :password)');
+            $stm2 = $pdo->prepare('INSERT INTO user_stuff(username, lastlogin, password) VALUES (:username, now(), :password)');
            
             $stm2->execute(['username'=>$username, 'password'=>$password]);
             //I need to make sure this is inserting
@@ -56,9 +56,13 @@ $pdo = Connect::get()->connect();
              header('Location: login.php');
              exit();
          }
+//On exception, print exception instead of redirect
+
 }  catch (\PDOException $e){
-        $_SESSION['exception']=true;
-        header('Location: createuser.php'); 
+       // $_SESSION['exception']=true;
+       // header('Location: createuser.php'); 
+          echo $e;
+          exit();
 }
 //Handles SQL for the new user field for the website
 ?>
