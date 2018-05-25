@@ -26,7 +26,10 @@ $password=$_POST['password'];
 
 try{
 $pdo = Connect::get()->connect();
+    
     $stml = $pdo->prepare('SELECT * FROM user_stuff WHERE username = :username');
+
+
     $stml->execute([':username'=>$username]);
     $match = $stml->fetch(PDO::FETCH_ASSOC);
     
@@ -39,10 +42,15 @@ $pdo = Connect::get()->connect();
     else {
         $pass = $match['password'];
         if ($pass == $password){
+
+
             $result='logged_in';
             //prepare query and push timestamp
-            $stm2 = $pdo->prepare('update user_stuff set last_login=now() where username = :username');
+            var_dump($pdo);
+            $stm2 = $pdo->prepare('update user_stuff set lastlogin=now() where username = :username');
             $stm2->execute(['username'=>$username]);
+
+
             //start session
             $_SESSION['valid'] = true;
             $_SESSION['last_used'] = time();
@@ -51,16 +59,17 @@ $pdo = Connect::get()->connect();
          }
         else {
             $_SESSION['badPass']=true;
-           
-            //echo 'Passwords do not match!<br>';
             header('Location: login.php');
         }
 
     }
+
 }  catch (\PDOException $e){
-    $result='no_connect';
+    //var_dump($e);
+    header('Location: login.php');
 }
 //authentication code for the website
+
 ?>
 
 <html>

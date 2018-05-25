@@ -69,6 +69,11 @@ echo 'Please Log In';
 		echo '<script> window.alert("User account created successfully!")</script>';
 		unset($_SESSION['newUserMade']);
 	}
+        if (isset($_SESSION['error'])){
+                echo '<script> window.alert("connection error") </script>';
+                unset($_SESSION['error']);
+        }
+
 	?>
 	<br style="clear: both">
 	<br>
@@ -80,57 +85,6 @@ echo 'Please Log In';
 </div>
 
 <br>
-
-
-<?php
-/*
-if (! isset($_POST) or sizeof($_POST)<2) {
-        $username = 'No_entry';
-        $password = 'No_entry';
-}
-else {
-    //var_dump($_POST);
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-}
-try{
-        
-    $pdo = Connect::get()->connect();
-    $stm1 = $pdo->prepare('SELECT * FROM user_stuff WHERE username = :username');
-    $stm1->execute([':username'=>$username]);
-    $match = $stm1->fetch(PDO::FETCH_ASSOC);
-    //var_dump($match);
-    if ($username=="No_entry"){
-         echo ' ';
-    }
-    elseif (! $match){
-        echo 'Username does not exist, please create an account.<br>';
-    }
-    else {
-        $pass = $match['password'];
-        if ($pass == $password){
-            //prepare query and push a timestamp
-            $stm2 = $pdo->prepare('update user_stuff set last_login=now() where username = :username');
-            $stm2->execute([':username'=>$username]);
-            
-            //set a cookie
-            //setcookie('SCServiceUser', $username, time() + 86400, "/");
-            //start a session?
-            $_SESSION['valid'] = true;
-            $_SESSION['last_used'] = time();
-            $_SESSION['username'] = $username;
-         }
-         else { //error
-            echo 'Passwords do not match<br>';
-         }
-     }
-} catch (\PDOException $e){
-    echo $e->getMessage();
-
-}
-
-*/
-//?>
 
 </div>
 </center>
