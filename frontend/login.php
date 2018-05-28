@@ -4,7 +4,7 @@ if (isset($_SESSION['valid'])){
     header('Location: searchproduct.php');
     exit;
 }
- ?>
+?><!DOCTYPE HTML>
 
 <html>
 <body>

@@ -14,7 +14,6 @@ if(isset($_SESSION['valid'])){
 }
 elseif(!(isset($_POST))){
     header('Location: login.php');
-    //echo "Redirect to Login";
     //redirect to Login
     exit();
 }
@@ -68,16 +67,6 @@ $pdo = Connect::get()->connect();
     //var_dump($e);
     header('Location: login.php');
 }
-//authentication code for the website
-
+//The HTML code should never be reached. Let's delete and see what happens
 ?>
 
-<html>
-<body>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<title>Should Cost: Login</title>
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-<!--Don't need this so I will not add links -->
-
-</body>
-</html>
