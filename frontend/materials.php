@@ -1,14 +1,7 @@
 <?php
-
-//materials.php
-
-//add libraries and autoloads
 require 'vendor/autoload.php';
 use scservice\SCConnect as Connect;
-
-
 //Start session and check for login
-
 session_start();
 if(!isset($_SESSION['valid'])){ //if session is not set return to login
     header("Location: login.php");
@@ -31,15 +24,10 @@ try{
 //Get product list
 $prodName = $_GET["product"];
 $term = strtolower(str_ireplace('_', ' ', $_GET["product"]));
-$checkReturn=null;
-try{
-    $check = $pdo->prepare('SELECT commodities.name FROM composition, commodities, products WHERE composition.productid=(select idpro from products where name=:name) and commodities.idcomm=composition.commodityid ORDER BY commodities.name');
-    $check->execute([':name'=>$term]);
-    $checkReturn = $check->fetch(PDO::FETCH_ASSOC);
-    $check=null;
-}catch(Exception $e){
-    echo 'Message: ' .$e->getMessage();
-}
+$check = $pdo->prepare('SELECT commodities.name FROM composition, commodities, products WHERE composition.productid=(select idpro from products where name=:name) and commodities.idcomm=composition.commodityid ORDER BY commodities.name');
+$check->execute([':name'=>$term]);
+$checkReturn = $check->fetch(PDO::FETCH_ASSOC);
+$check=null;
 //IF result is empty, save incorrect term and return to searchproduct.php   
 if (!$checkReturn) {
     $_SESSION['noterm']=true;
@@ -50,13 +38,9 @@ if (!$checkReturn) {
 //Here we check to see if this is an actual search or a history click
 //If it is a typed search we will insert it into search history
 else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
-    try{
-        $addRecent = $pdo->prepare('INSERT INTO search_history (userid, searchterm,type,searchtime) VALUES ((SELECT iduser FROM user_stuff WHERE username=:username), :term, :type, now())');
-        $addRecent->execute([':username'=>$_SESSION['username'], ':term'=>$term, ':type'=>'product']);
-        $addRecent=null;
-    }catch(Exception $e){
-        echo 'Message: '.$e->getMessage();
-    }
+    $addRecent = $pdo->prepare('INSERT INTO search_history (userid, searchterm,type,searchtime) VALUES ((SELECT iduser FROM user_stuff WHERE username=:username), :term, :type, now())');
+    $addRecent->execute([':username'=>$_SESSION['username'], ':term'=>$term, ':type'=>'product']);
+    $addRecent=null;
     //Reset valid search flag to prevent duplicate insertions
     $_SESSION['issearch'] = false;
 }
@@ -70,7 +54,7 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </head> 
-<body style=background_color:silver>
+<body style=background-color:silver>
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <?php echo $_SESSION['username']; ?>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +111,6 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
     *{
         box-sizing: border-box;
     }
-
     /* Create three equal columns that floats next to each other */
     .column
     {
@@ -135,7 +118,6 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
         width: 33.33%;
         padding: 10px;
     }
-
     /* Clear floats after the columns */
     .row:after
     {
@@ -143,7 +125,6 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
        display: table;
        clear: both;
     }
-
     .checkmark {
         position: absolute;
         top: 200;
@@ -158,24 +139,24 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
     <div class='card-deck' style="width: 95%; margin-left:2.5%; margin-right:2.5%;">
         <div class="card" style="background-color:silver;">
             <h2>Materials</h2>
-
             <?php
-            try{
-                $result=$pdo->prepare("SELECT commodities.name FROM composition, commodities, products  WHERE composition.productid=(select idpro from products where name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
-                $result->execute([':name'=>$term]);
-                while($row=$result->fetch(/*PDO::FETCH_ASSOC*/)){
-                    if(!contains($row[0])){ //red background if no result found
-                        echo "<font style='background-color:red'>".$row[0]."</font>";
-                        $GLOBAL['highlight'] = true;
-                    }
-                    else{
-                        echo $row[0]."</br>";
-                    }
+try{
+            $result=$pdo->prepare("SELECT DISTINCT commodities.name FROM composition, commodities, products  WHERE composition.productid=(select idpro from products where name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
+            $result->execute([':name'=>$term]);
+            //$searchResult=$result->fetchAll(PDO::FETCH_ASSOC);
+            while($row=$result->fetch(/*PDO::FETCH_ASSOC*/)){
+                if(!contains($row[0])){ //red background if no result found
+                    echo "<font style='background-color:red'>".$row[0]."</font>";
+                    $GLOBAL['highlight'] = true;
                 }
-                $result=null;
-            }catch(Exception $e){
-                echo 'Message: ' .$e->getMessage();
+                else{
+                    echo $row[0]."</br>";
+                }
             }
+            $result=null;
+}catch(Exception $e){
+    echo $e->getMessage();
+}
             ?>
         </div>
 
@@ -192,27 +173,30 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
             $arrayWeight=[];
             $arrayUnitPrice=[];
             $chartData = [];
-            try{
-                $price=$pdo->prepare("SELECT commodities.price, commodities.name FROM commodities, composition, products WHERE composition.productid=(SELECT idpro FROM products WHERE name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");rrayNames = [];
-                $price->execute([':name'=>$term]);
-                $unit=$pdo->prepare("SELECT commodities.unit from commodities, composition, products where composition.productid=(select idpro from products where name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
-                $unit->execute([':name'=>$term]);
-                while (($row = $price->fetch(/*PDO::FETCH_ASSOC*/)) && ($row2=$unit->fetch(/*PDO::FETCH_ASSOC*/))){
-                    array_push($arrayPrice, $row[0]);
-                    array_push($arrayNames, $row[1]);
-                    array_push($arrayUnit, $row2[0]);
-                    if(!contains($row[1])){
-                        echo "<font style='background-color:red'>$".round($row[0], 2)."/".$row2[0]."</font>";
-                    }
-                    else{
-                        echo "$".round($row[0], 2)."/".$row2[0]."</br>";
-                   }
+try{
+            $price=$pdo->prepare("SELECT DISTINCT commodities.price, commodities.name FROM commodities, composition, products WHERE composition.productid=(SELECT idpro FROM products WHERE name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
+            $price->execute([':name'=>$term]);
+            $unit=$pdo->prepare("SELECT DISTINCT commodities.unit, commodities.name from commodities, composition, products where composition.productid=(select idpro from products where name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
+            $unit->execute([':name'=>$term]);
+
+            while (($row = $price->fetch(/*PDO::FETCH_ASSOC*/)) && ($row2=$unit->fetch(/*PDO::FETCH_ASSOC*/))){
+                array_push($arrayPrice, $row[0]);
+                array_push($arrayNames, $row[1]);
+                array_push($arrayUnit, $row2[0]);
+                if(!contains($row[1])){
+                    echo "<font style='background-color:red'>$".round($row[0], 2)."/".$row2[0]."</font>";
                 }
-                $unit=null;
-                $price=null;
-            }catch(Exception $e){
-                echo "Message: ".$e->getMessage();
+                else{
+                    echo "$".round($row[0], 2)."/".$row2[0]."</br>";
+                    //array_push($arrayNames, [$row[1]]);
+                    //what about $arrayUnit?
+                }
             }
+            $unit=null;
+            $price=null;
+}catch(Exception $e){
+    echo $e->getMessage();
+}
             ?>
         </div>
 
@@ -221,22 +205,23 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
             <h2>Weight</h2>
             <?php
             $red_weight=false;
-            try{
-                $weight=$pdo->prepare("SELECT composition.unit_weight, commodities.name from products, composition, commodities where composition.productid=(SELECT idpro from products where name=:name) and composition.commodityid=commodities.idcomm order by commodities.name");
-                $weight->execute([':name'=>$term]);
-                while($row=$weight->fetch(/*PDO::FETCH_ASSOC*/)){
-                    array_push($arrayWeight, $row[0]);
-                    if(!contains($row[1])){
-                        echo "<font style='background-color:red'>".round($row[0], 2)."</font>";
-                        $red_weight=true;
-                    }
-                    else{
-                        echo round($row[0], 2)."</br>";
-                    }
+try{
+            $weight=$pdo->prepare("SELECT DISTINCT composition.unit_weight, commodities.name from products, composition, commodities where composition.productid=(SELECT idpro from products where name=:name) and composition.commodityid=commodities.idcomm order by commodities.name");
+            $weight->execute([':name'=>$term]);
+            while($row=$weight->fetch(/*PDO::FETCH_ASSOC*/)){
+                array_push($arrayWeight, $row[0]);
+                if(!contains($row[1])){
+                    echo "<font style='background-color:red'>".round($row[0], 2)."</font>";
+                    $red_weight=true;
                 }
-                $weight=null;
-            }catch(Exception $e){
-                echo 'Message: '.$e->getMessage();
+                else{
+                    echo round($row[0], 2)."</br>";
+                }
+            }
+            $weight=null;
+}catch(Exception $e){
+    echo $e->getMessage();
+}          
             ?>
         </div>
 
@@ -245,15 +230,10 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
             <h2>Unit Price</h2>
             <?php
           
-
-
-
-
             /*I want to debug this, but I don't know where to start
              *The first Fetch statement is returning a bool true statement instead of values.
              *This identical code is returning proper values above, and the second statement works.
              *There are no questions about this online - I'm completely lost.
-
             $weight2=$pdo->prepare("SELECT composition.unit_weight, commodities.name from products, composition, commodities where composition.productid=(SELECT idpro from products where name=:name) and composition.commodityid=commodities.idcomm order by commodities.name");
             $weight2->execute([':name'=>$term]);
             $price=$pdo->prepare("SELECT commodities.price, commodities.name FROM commodities, composition, products WHERE composition.productid=(SELECT idpro FROM products WHERE name=:name) and composition.commodityid=commodities.idcomm ORDER BY commodities.name");
@@ -272,12 +252,11 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
             }
             $weight=null;
             $price=null;
-
             *End problem code - going to try another tack.
             */
 
-
-           //Finding unit prices and sum
+            //declaring array data for chart
+           $chartdata=[];
            $sum=0;
            
            $weightToPrice = array_combine($arrayWeight, $arrayPrice);
@@ -300,6 +279,7 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
 
 <!-- ---------Total--------- -->
     <h2>Total</h2>
+   <div>
     <?php
     echo "<div>";
     //Why use echo here and not above? Consider changing
@@ -319,6 +299,7 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
         }
     }
     $pdo=null;
+
 /* Assigning the pairs of names and prices to the chart - product/total, then commodities/(price/total)*/
     echo "<br>";
 //    for($i=0; $i<count($arrayNames); $i++){
@@ -333,4 +314,3 @@ else if (isset($_SESSION['issearch']) && $_SESSION['issearch']) {
 </div>
 </body>
 </html>
-
