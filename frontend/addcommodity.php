@@ -110,6 +110,7 @@ if (!isset($_SESSION['valid'])){
                         //Alert to existing commodity
                         echo "<script type='text/javascript'>alert('commodity already exists');</script>";
                     }
+                    //Free statement and connection memory
                     $commStm=null;
                     $pdo=null;
                 }catch(Exception $e){

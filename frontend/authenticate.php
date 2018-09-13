@@ -31,6 +31,7 @@ $pdo = Connect::get()->connect();
 
     $stml->execute([':username'=>$username]);
     $match = $stml->fetch(PDO::FETCH_ASSOC);
+    $stml=null;
     
     if (! $match){
         $result='no_user';

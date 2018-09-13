@@ -25,6 +25,7 @@ if (!isset($_SESSION['valid'])){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
+
 <body style="background-color:silver">  
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <?php echo $_SESSION['username']; ?>
@@ -65,6 +66,8 @@ if (!isset($_SESSION['valid'])){
 <center>
 <!-- Delete later and move to CSS file -->
 <style='background-color:silver'>
+
+
 <div class="card bg-primary" style="width: 50rem;">
     <br/>
     <div class="h1 card-title">Add Product</div>
@@ -76,6 +79,7 @@ if (!isset($_SESSION['valid'])){
          
 <script language="javascript">
     var commodityCount = 0;
+
     //Adds a new commodity field to the form
     function addCommodity() {
         commodityCount++; //increment counter for new id
@@ -93,6 +97,7 @@ if (!isset($_SESSION['valid'])){
         html += '<div style="clear:both;"><br></div>';
         addElement("productDetails", "div", "commodity-" + commodityCount, html);
     }
+
     //function to add a new html element
     function addElement(parent, tag, id, html) {
         var setParent = document.getElementById(parent);
@@ -101,6 +106,7 @@ if (!isset($_SESSION['valid'])){
         newElement.innerHTML = html;
         setParent.appendChild(newElement);
     }
+
     //Remove element from its parent node
     function removeElement(element){
         element.parentNode.removeChild(element);
@@ -135,7 +141,8 @@ if (!isset($_SESSION['valid'])){
                     //Create new product entry in products table
                     $productsInsert = $pdo->prepare('INSERT INTO products (name) VALUES (:name)');
                     $productsInsert->execute(['name'=>$name]);			
-                    //I can't find a free memory command for pdo
+                    //free statement memory by setting to null
+                    $productsInsert=null;
                     //Confirm that a commodity name was given in form submission
                     if(isset($_POST["commodities"])){
                         $i = 0;
@@ -144,11 +151,12 @@ if (!isset($_SESSION['valid'])){
                             $stm_com = $pdo->prepare('SELECT * FROM commodities WHERE name = :commodity');
                             $stm_com->execute([':commodity'=>$commodity]);
                             $commodityReturn = $stm_com->fetch(PDO::FETCH_ASSOC);		
-                            
+                            $stm_con=null;
                             //see if commodity exists and if not insert
                             if(!($commodityReturn)){
                                 $newcom = $pdo->prepare('INSERT INTO commodities (name, unit, price) VALUES (:commodity, :unit, :price)');
                                 $newcom->execute([':commodity'=>$commodity, ':unit'=>$_POST["units"][$i], ':price'=>$_POST["prices"][$i]]);
+                                $newcom=null;
                             }
                             else {
                                 //Store unchanged commodites in string variable
@@ -156,6 +164,7 @@ if (!isset($_SESSION['valid'])){
                             }
                             $stm_comp = $pdo->prepare('INSERT INTO composition (unit_weight, productid, commodityid) VALUES (:weight, (select idpro from products where name=:name), (select idcomm from commodities where name=:commodity))');
                             $stm_comp->execute([':weight'=>$_POST["weights"][$i], ':name'=>$name, ':commodity'=>$commodity]);
+                            $stm_comp=null;
                             $i++;
                         }
                     }
@@ -183,5 +192,4 @@ if (!isset($_SESSION['valid'])){
     }
 </script>
 </html>
-
 

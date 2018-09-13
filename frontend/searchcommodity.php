@@ -22,6 +22,8 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 <?php
 
     //Query database and store product names in an array
+    //(design NEEDS to be changed to only load AFTER typing in a letter or two)
+    //(Finishing first task first though)
         try{
             $pdo=Connect::get()->connect();
             $commStm=$pdo->prepare("SELECT name from commodities");
@@ -98,7 +100,7 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
             }
             ?>
             </p>
-            <form action="commodityInfo.php"  autocomplete="off" method="GET">
+            <form action="commodityinfo.php"  autocomplete="off" method="GET">
                 <input type="text" class="form-control" style="width:85%;float:left;" id ="commoditysearch" name="commoditysearch" onChange="createList()" placeholder="Enter Commodity to Search">
                 <button type="submit" class="border btn btn-primary border-dark text-dark">Search</button>
                 <div style="width:85%; background-color:white; clear:both; float:left;" id="completeContainer"/> 
