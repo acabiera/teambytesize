@@ -1,6 +1,6 @@
 <?php
 //commodityinfo.php
-
+   
 require 'vendor/autoload.php';
 use scservice\SCConnect as Connect;
 
