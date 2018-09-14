@@ -1,16 +1,19 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <link rel="stylesheet" href="style01.css">
         <title>Should-Cost Extended Development: Introduction</title>
     </head>
     <body>
         <h1>Should-Cost Analysis Extended Development: Introduction</h1>
-         <div><p>This was my CSCE Capstone project: <a href="http://capstone.csce.uark.edu/?page_id=6044">Should Cost Analysis.</a> It was a fairly simple design to find commodity prices and break down products into commodities so that people could figure out how much a fair price for an object would be.</p>
+         <div><p>This was my CSCE Capstone project: <a class="inline" href="http://capstone.csce.uark.edu/?page_id=6044">Should Cost Analysis.</a> It was a fairly simple design to find commodity prices and break down products into commodities so that people could figure out how much a fair price for an object would be.</p>
              <p>I'm not going to discuss the grade we got for it or the class itself. I think that my group did a good job, and from what I can tell most of them are doing well now; I'm happy about that. But given my health problems during the semester, I don't think that I, personally, did as much as I could have. And I would like to do more work on it, expand it, create an interface that'll work with multiple databases and multiple commodity APIs and such. I want to make it secure, which I know will require a full redesign. I want to make the code cleaner and easier to read if you're coming into it blind, and part of that will be disconnecting it from the CSS we generated for it via a third-party site. (The site's formatting looked fine, but it's going to be a good way to learn more about CSS, if nothing else.)</p>
              <p>I already have some of the work done; one of the first things I wanted to do was switch any remaining Postgres-only pg_connect logic to the more generic PDO type. I know that pg_connect probably has better performance if you know you're going to be working with Postgres, but other users might prefer other databases. The big thing about PDO is that you can use MySQL or SQLi or whatever type you want to use and still be able to connect to the database without making a big effort to edit the code. </p>
-             <p>My fork for the project is <a href="https://github.com/vlhobbs/teambytesize">here</a>. I have finished some unrelated projects and have more time to work on it now, so I'm hoping to finish the PDO swap soon, and to start on a few more of the <a href="https://github.com/vlhobbs/teambytesize/projects">project objectives</a> that I have already added.</p>
-             <span>
-                 <p>Note: Given the logo on the site, I should point out that I am not currently receiving any comments, consideration or support from Wal-Mart to continue this project. Their name is on the original project site because they were the ones that submitted the project that our group picked up. Our professor gave us a choice between making this an open-source project or retaining copyright; we chose to make it open source, which means that I can continue to edit it and that people are free to use it. (The license is on the Hub's readme.)</p>
+             <p>My fork for the project is <a class="inline" href="https://github.com/vlhobbs/teambytesize">here</a>. I have finished some unrelated projects and have more time to work on it now, so I'm hoping to finish the PDO swap soon, and to start on a few more of the <a class="inline" href="https://github.com/vlhobbs/teambytesize/projects">project objectives</a> that I have already added.</p>
+         </div>
+         <div id="disc">
+            <span>
+                 Note: Given the logo on the site, I should point out that I am not currently receiving any comments, consideration or support from Wal-Mart to continue this project. Their name is on the original project site because they were the ones that submitted the project that our group picked up. Our professor gave us a choice between making this an open-source project or retaining copyright; we chose to make it open source, which means that I can continue to edit it and that people are free to use it. (The license is on the Hub's readme.)
              </span>
         </div>
     </body>
