@@ -18,8 +18,12 @@ if (!(isset($_SESSION['valid']))){
 
 try{
     $pdo=Connect::get()->connect();
+
+
     //insert code to delete all but ten latest searches.
     //$deleteOld=$pdo->prepare('DELETE from search_history where searchtime <= (select searchtime from (select searchtime from search_history order by searchtime desc limit 1 offset 10)));
+    //Giving me trouble, will figure it out later
+
     //store list of searches in a variable
     $searchReturn=$pdo->prepare('SELECT searchterm, searchtime, type FROM search_history WHERE userid=(SELECT iduser FROM user_stuff WHERE username=:username)');
     $searchReturn->execute([':username'=>$_SESSION['username']]);
@@ -79,7 +83,7 @@ try{
 <div class="card bg-primary" style="width: 50rem;">
     <br>
         <div class="h1 card-title">Recent Searches</div>
-            <p>These are your last five searches:</p>
+            <p>These are your last searches:</p>
             <div id="headerContainer" style="width:70%; margin:auto;">
 
 <!-- Search Time -->
