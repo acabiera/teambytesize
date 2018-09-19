@@ -1,42 +1,74 @@
 <?php
 session_start();
 
-if (!(isset($_SESSION)) || !($_SESSION['valid']))){
-    header("Location: login.php");
-    exit;
-}
+//if (!(isset($_SESSION)) || !($_SESSION['valid'])){
+//    header("Location: login.php");
+//    exit;
+//}
 
+?>
 <html>
-<body>
+<head>
+<!--
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+-->
+
+<link rel="stylesheet" type="text/css" href="scstyle_01.css">
+
 <title>Capstone Template (Should-Cost)</title>
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <a class="navbar-brand" href="#">User Name</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+</head>
+<body>
+
+<nav>
+  <a href="#">User Name</a>
+  <button>
+    <span></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="home.php">Home</a>
-      <a class="nav-item nav-link" href="recentsearch.php">Recent Searches</a>
-      <a class="nav-item nav-link" href="addproduct.php">Add Product</a>
-      <a class="nav-item nav-link" href="logout.php">Logout</a>
-    </div>
+  <div>
+    <ul>
+	
+<!-- Dropdown Products -->
+      <li>
+        <a>Products</a>
+        <div>
+          <a href="searchproduct.php">Product Search</a>
+          <a href="addproduct.php">Add Product</a>
+        </div>
+      </li>
+
+<!-- Dropdown Commodities -->
+      <li>
+        <a href="#">
+          Commodities
+        </a>
+        <div>
+          <a href="searchcommodity.php">Commodity Search</a>
+          <a href="addcommodity.php">Add Commodity</a>
+        </div>
+      </li>
+
+<!-- Hyperlinks -->
+      <a href="recentsearches.php">Recent Searches</a>
+     <a href="logout.php">Logout</a>
+    </ul>
+
   </div>
 </nav>
+
 <br></br>
-<center>
-<div class="card bg-primary" style="width: 50rem;">
-<div class="h1 card-title">Card Title</div>
+
+<div>
+<div><h1>Template</h1></div>
 
 <br> <?php
+
 ?>
 
 
 
 
 </div>
-</center>
+
 
 </body>
 </html>
