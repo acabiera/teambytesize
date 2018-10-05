@@ -1,9 +1,79 @@
 body {
     background-color: #c0c0c0;
+    font-family: "Gill Sans", sans-serif;
 }
 
+h1 {
+   text-align:center;
+}
 div {
     border-style: solid;
     border-color: black;
     border-radius: 6px;
+    max-width: 700px;
 }
+
+div.sidebar {
+    float:left;
+    min-height:300px;
+    background-color: #ffffff;
+    max-width: 200px;
+    text-align:center;
+}
+
+button.dropbutton {
+    background-color: #ffffff;
+    color: #000000;
+    width: 175px;
+    height: 50px;
+    padding: 16px;
+    font-size: 15px;
+    border: 2px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropcontent {
+    display:none;
+    position: absolute;
+    top: -30px;   
+    left: 160px;  
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropcontent a {
+    background-color: #ffffff;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropcontent a:hover {background-color: #ddd;}
+.dropdown:hover .dropcontent {display: block;}
+.dropdown:hover .dropbutton {background-color: #db7093;}
+
+
+
+div.main{
+    min-width:500px;
+    max-width:800px;
+    padding: 20px;
+    margin:auto;
+}
+
+.main form{
+text-align:center;
+margin: 0 auto;
+}
+
+.main button {
+margin: 0 auto;
+background-color: #fefefe;
+}
+
