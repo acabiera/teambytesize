@@ -12,7 +12,8 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
 }
 
 
-?><DOCTYPE HTML>
+?>
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>Should-Cost Analysis: Product Search</title>

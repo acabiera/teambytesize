@@ -101,7 +101,8 @@ try{
                     <input type="text" id ="product" name="product" onChange="createList()" placeholder="Enter Product to Search">
                     <br>
                     <button type="submit">Search</button>
-                    <div id="completecontainer"></div>
+                    <div id="completeContainer">
+                    </div>
                 </form>
             </div>
         </div>
