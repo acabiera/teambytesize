@@ -19,7 +19,7 @@ session_start();
     </head>
     <body>
         <div class="sidebar">
-            <a href="#">User Name</a>
+            User Name
           
             <br>
 <!-- Dropdown Products -->
@@ -62,14 +62,16 @@ session_start();
     
             <br>Test text goes here for seeing how the page looks with it.
             <br>Need to make sure that it is displayed properly.
-            <form>
-                <label for="test1">Test Field 1</label>
-                <input type="text" placeholder="Input 1">
-                <br>
-                <label for "test2">Test Field 2</label>
-                <input type="text" placeholder="Input 2">
-            </form>
-            <br><button>Test button</button>
+            <div class="noborder">
+                <form>
+                    <label for="test1">Test Field 1</label>
+                    <input type="text" placeholder="Input 1">
+                    <br>
+                    <label for="test2">Test Field 2</label>
+                    <input type="text" placeholder="Input 2">
+                    <br><button>Test button</button>
+                </form>
+            </div>
  <?php
 //Code
 ?>
