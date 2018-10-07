@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Should-Cost Extended Development: </title>
+        <link rel="stylesheet" href="style01.css">
+    </head>
+
+    <body>
+        <h1>Should-Cost Analysis Extended Development: Update (10/07/2018) </h1>
+
+        <div>
+
+            <p>Converting the login.php page to the new template went off with absolutely no problem. The forms work just fine, and entering the name and password takes me to searchproduct.php as intended. The sidebar is not there because there's no need for it on the login page, and I may delete it entirely. I still want to create a separate page for the sidebar and see if I can load it automatically onto the pages that need it.
+
+            <p><img src="new_login_page.png" alt="New login.php format">
+
+            <p>Then I went to do the same to searchproduct.php, and somehow broke the script that was enabling the autocomplete function. At this point I will probably try to roll back the changes I've already made - there must be a way to pull a single file back from Github*.
+
+            <p>Right now the autocomplete scripts are accessing the entire list of items that could be searched for, then saving them as an array. It works now because the test lists that I have been working with have been quite small. They worked fine during the actual course demo for the same reason. But it's not going to work on a larger scale. What I want to eventually do is set it up so that it only checks for options after a certain number of charaters has already been entered. For now I could get away with one or two. Later it might be three. I wanted to do something similar during the course, but it was a low priority.
+
+            <p>I'm planning to start over with the autocomplete scripts instead of trying to adapt the one here. I need to rewrite the code myself so that I can really understand what it's doing. Autocomplete at this point is not an absolute necessity. I'm still going to investigate the current scripts and figure out what happened, because I am not sure what happened. 
+
+            <p>*This is how I fixed it.
+
+            <ol>
+                <li>Find the SHA of the last commit that had a "good" copy of the file that you want to recover. You only need the seven-digit number, not the full number, which is good, because copying from anywhere but the terminal and pasting into the terminal is horrible on this thing. There are terminal commands and shortcuts for this that I might edit in later, but in my case I just browsed to the commit history page on my repository and found the right number.
+
+                <li>Use this command: 
+                <br>$git checkout [SHA] dir/file
+
+                <br>[SHA] is the seven (or forty) digit number; dir/file is the path to whatever file you're grabbing. That will basically download the correct file to your directory.
+
+                <li>Use git add, git commit and git push as you normally would, to create a new commit that will overwrite the missing or incorrect version in the repository.
+            </ol>
+            <p>It took me a while to find a straight answer about this problem. I hope that writing it down here will help someone.
+            <p><a href="https://vlhobbs.github.io/teambytesize">Back to Index</a>
+        </div>
+    </body>
+</html>
+

@@ -16,34 +16,64 @@ if (!isset($_SESSION['valid'])){
     exit();
 }
 
-?>
-<!DOCTYPE HTML>
+?><!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Add Product</title>
-        <link rel="stylesheet" type="text/css" href="scstyle_01.css">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </head>
+<head>
+    <title>Add Product</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color:silver">  
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <?php echo $_SESSION['username']; ?>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <ul class="navbar-nav">
+
+<!-- Dropdown Products -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Products</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="searchproduct.php">Product Search</a>
+                <a class="dropdown-item" href="addproduct.php">Add Product</a>
+            </div>
+        </li>
+
+<!-- Dropdown Commodities -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Commodities</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="searchcommodity.php">Commodity Search</a>
+                <a class="dropdown-item" href="addcommodity.php">Add Commodity</a>
+            </div>
+        </li>
+
+<!-- Hyperlinks -->
+        <a class="nav-item nav-link text-white" href="recentsearches.php">Recent Searches</a>
+        <a class="nav-item nav-link text-white" href="logout.php">Logout</a>
+    </ul>
+    </div>
+<!-- Delete this closing div tag later and see if it works -->
+</div>
+</nav>
+
+<br>
+<center>
+<!-- Delete later and move to CSS file -->
+<style='background-color:silver'>
 
 
-    <body>  
-        <div class="sidebar">
-<?php
-    echo $_SESSION['username']; 
-    include 'sidebar.php';
-?>
-        </div>
-
-        <div class="main">
-
-            <h1>Add Product</h1>
-
-            <form name="newproduct" action="addproduct.php" autocomplete="off" method="POST">
-
-            <div id="productDetails" class="noborder">
-                <input type="text" name="productname" placeholder="Enter Product Name" required/>
+<div class="card bg-primary" style="width: 50rem;">
+    <br/>
+    <div class="h1 card-title">Add Product</div>
+        <form name="newproduct" action="addproduct.php" autocomplete="off" method="POST" class="card-body">
+            <div id="productDetails" class="form-group">
+                <input type="text" class="form-control" name="productname" placeholder="Enter Product Name" required/>
                 <br>
 
          
@@ -54,17 +84,17 @@ if (!isset($_SESSION['valid'])){
     function addCommodity() {
         commodityCount++; //increment counter for new id
         //Add an input field for the commodity name
-        var html = '<input type="text" name="commodities[]" placeholder="Commodity Name"required/>'
+        var html = '<input type="text" class="form-control" name="commodities[]" style="width:25%;float:left;" placeholder="Commodity Name"required/>'
         //Add an input field for the commodity price
-        html += '<input type="number" min="0" step="0.01" name="prices[]" placeholder="Price in USD"required/>';
+        html += '<input type="number" min="0" step="0.01" class="form-control" name="prices[]" style="width:20%;float:left; margin-left:1%;" placeholder="Price in USD"required/>';
         //Add an input field for the commodity unit
-        html += '<input type="text" name="units[]" placeholder="Weight Unit"required/>';
+        html += '<input type="text" class="form-control" name="units[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight Unit"required/>';
         //Add an input field for the commodity weight
-        html += '<input type="number" min="0" step="0.01" name="weights[]" placeholder="Weight"required/>';
+        html += '<input type="number" min="0" step="0.01" class="form-control" name="weights[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight"required/>';
         //Add a button to remove the commodity info 
-        html += '<button type="button"  onclick="removeElement(this.parentNode)">Remove</button>'
+        html += '<button type="button" class="border btn btn-primary border-dark text-dark" onclick="removeElement(this.parentNode)" style="float:right">Remove</button>'
         //Add a div to create space below each new commodity 
-        html += '<div class="noborder"><br></div>';
+        html += '<div style="clear:both;"><br></div>';
         addElement("productDetails", "div", "commodity-" + commodityCount, html);
     }
 
@@ -87,9 +117,9 @@ if (!isset($_SESSION['valid'])){
 
 
             </div>
-            <div class="noborder">
-                <button type="button" onclick="addCommodity()">Add Commodity</button>
-                <button type="submit">Submit</button>
+            <div id="buttonContainer">
+                <button type="button" class="border btn btn-primary border-dark text-dark" onclick="addCommodity()">Add Commodity</button>
+                <button type="submit" class="border btn btn-primary border-dark text-dark">Submit</button>
             </div>
         </form>
 	
@@ -154,7 +184,7 @@ if (!isset($_SESSION['valid'])){
         }
     ?>
     </div>
- 
+    </center>
 </body>
 <script language="javascript">
     if(cUnchanged.length !== 0) {
