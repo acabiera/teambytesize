@@ -1,12 +1,13 @@
 <?php
-require 'vendor/autoload.php';
-use scservice\SCConnect as Connect;
-//Start session and check for login
-session_start();
-if(!isset($_SESSION['valid'])){ //if session is not set return to login
-    header("Location: login.php");
-    exit();
-}
+    //materials.php
+    require 'vendor/autoload.php';
+    use scservice\SCConnect as Connect;
+    //Start session and check for login
+    session_start();
+    if(!isset($_SESSION['valid'])){ //if session is not set return to login
+        header("Location: login.php");
+        exit();
+    }
 //Set up highlights
 $GLOBAL['highlight'] = false;
 include('var.php');

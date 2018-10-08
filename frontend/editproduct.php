@@ -19,9 +19,9 @@ session_start();
     //Set flag so database info doesn't update on first load
     $firstLoad = true;
 
-    //temporary fix until we get this working: Set $product to an empty string if there isn't one
+    //Set $product to an empty string if there isn't one
 
-    $product="ptest01";
+    $product="";
 
     //Store the product name as it appears in the database
     if(isset($_GET["product"])){
@@ -31,10 +31,6 @@ session_start();
     //Attempt database connection
     try {
         $pdo = Connect::get()->connect(); 
-//    }
-//     catch(Exception $e){
-//         echo 'Message: ' .$e->getMessage();
-//    }
 
 //fetch product query
 //this statement works in the postgres shell
@@ -45,6 +41,7 @@ session_start();
     $commodityArr=$productQuery->fetchAll(PDO::FETCH_ASSOC);
 //free query memory
     $productQuery=null;
+    //I need logic if this comes back null
 
     if(isset($_POST["deleteproduct"])){
 
@@ -130,7 +127,7 @@ session_start();
 ?>
 <html>
     <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="scstyle_01.css">
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -142,22 +139,22 @@ session_start();
                 commodityCount++; //increment counter for new id
 
                 //Add an input field for the commodity name
-                var html = '<input value="'+name+'" type="text" class="form-control" name="commodities[]" style="width:25%;float:left;" placeholder="Commodity Name"required/>'
+                var html = '<input value="'+name+'" type="text" name="commodities[]" placeholder="Commodity Name"required/>'
 
                 //Add an input field for the commodity price
-                html += '<input value="'+price+'" type="number" min="0" step="0.01" class="form-control" name="prices[]" style="width:20%;float:left; margin-left:1%;" placeholder="Price in USD"required/>';
+                html += '<input value="'+price+'" type="number" min="0" step="0.01" name="prices[]" placeholder="Price in USD"required/>';
 
                 //Add an input field for the commodity unit
-                html += '<input value="'+unit+'" type="text" class="form-control" name="units[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight Unit"required/>';
+                html += '<input value="'+unit+'" type="text" name="units[]" placeholder="Weight Unit"required/>';
 
                 //Add an input field for the commodity weight
-                html += '<input value="'+weight+'" type="number" min="0" step="0.01" class="form-control" name="weights[]" style="width:20%;float:left; margin-left:1%;" placeholder="Weight"required/>';
+                html += '<input value="'+weight+'" type="number" min="0" step="0.01" name="weights[]" placeholder="Weight"required/>';
 
                 //Add a button to remove the commodity info 
-                html += '<button type="button" class="border btn btn-primary border-dark text-dark" onclick="removeElement(this.parentNode)" style="float:right">Remove</button>'
+                html += '<button type="button" onclick="removeElement(this.parentNode)">Remove</button>'
 
                 //Add a div to create space below each new commodity 
-                html += '<div style="clear:both;"><br></div>';
+                html += '<div class="noborder"<br></div>';
 	
                 addElement("productDetails", "div", "commodity-" + commodityCount, html);
             }
@@ -187,58 +184,35 @@ session_start();
             //Variable for storing commodities that aren't updated in commodity table
             var cUnchanged = "";
             </script>
-        <title>Edit Product</title>
+        <title>Should-Cost: Edit Product</title>
         </head>
         <body>
-        <!-- deleting color - we'll get that into the css later -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+            <div class="sidebar">
 <?php
     echo $_SESSION['username'];
+    include 'sidebar.php';
 ?>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <ul class="navbar-nav">
+            </div>
 
-<!-- Dropdown Products -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Products</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="searchproduct.php">Product Search</a>
-                            <a class="dropdown-item" href="addproduct.php">Add Product</a>
-                        </div>
-                    </li>
+<br>
 
-<!-- Dropdown Commodities -->
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Commodities
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="searchcommodity.php">Commodity Search</a>
-          <a class="dropdown-item" href="addcommodity.php">Add Commodity</a>
-        </div>
-      </li>
-
-<!-- Hyperlinks -->
-      <a class="nav-item nav-link text-white" href="recentsearches.php">Recent Searches</a>
-     <a class="nav-item nav-link text-white" href="logout.php">Logout</a>
-    </ul>
-    </div>
-  </div>
-</nav>
-<br></br>
-<center>
-<div class="card bg-primary" style="width: 50rem;">
-    <br>
-        <div class="h1 card-title">Edit Item: 
+<div class="main">
+    <h1>Edit Product</h1>
+<?php
+    if ($product==""){
+        echo "Please enter a valid product to edit.";
+        //Eventually will add a form.
+    }
+?>
+    <div class="noborder">
+<br>        Editing information for:   
 <?php 
     echo ucwords($product);
 ?>
-        </div>
-    <form name="editProduct" action="editproduct.php?product=<?php echo $product ?>" autocomplete="off" method="POST" class="card-body">
-        <div id="productDetails" class="form-group">
+    <br>
+
+    <form name="editProduct" action="editproduct.php?product=<?php echo $product ?>" autocomplete="off" method="POST">
+        <div id="productDetails">
 <?php
     foreach($commodityArr as $commodity) {
         //This section encodes the field values to json and stores them in the input boxes for each commodity
@@ -258,14 +232,14 @@ session_start();
     }
 ?> 
         </div>
-        <div id="buttonContainer">
-            <button type="button" class="border btn btn-primary border-dark text-dark" onclick="addCommodity('','','','')">Add Commodity</button>
-            <button type="submit" class="border btn btn-primary border-dark text-dark">Update</button>
+        <div class="noborder">
+            <button type="button" onclick="addCommodity('','','','')">Add Commodity</button>
+            <button type="submit">Update</button>
         </div>
     </form>
     <!-- Delete Form -->
-    <form style="margin: 0; height: 0;" id="deleteForm" action="editproduct.php?product=<?php echo $product ?>" autocomplete="off" method="POST"">
-        <script language="javascript">		
+    <form style="margin: 0; height: 0;" id="deleteForm" action="editproduct.php?product=<?php echo $product ?>" autocomplete="off" method="POST">
+        <script language="javascript">
         //Add a simple confirmation before product deletion
         document.getElementById("deleteForm").onsubmit = function(){
             if (confirm('Are you sure you want to delete this product? This action can not be undone.'))
@@ -274,8 +248,8 @@ session_start();
                 return false;
         }
         </script>
-    <input type="hidden" style="height: 0px; id="hiddenDelete" name="deleteproduct"/>
-        <button style="position:absolute; top: 0; left: 0; margin: 1%;" type="submit" class="border btn btn-primary border-dark text-dark" onclick="deleteProduct()">Delete Product</button>
+    <input type="hidden" id="hiddenDelete" name="deleteproduct"/>
+        <button type="submit" onclick="deleteProduct()">Delete Product</button>
     </form>
 </div>
 </center>

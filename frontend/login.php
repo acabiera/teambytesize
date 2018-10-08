@@ -12,51 +12,11 @@ if (isset($_SESSION['valid'])){
         <title>Login</title>
     </head>
     <body>
-        <div class="sidebar">
-            
-
-
 <?php
-
     require 'vendor/autoload.php';
     use scservice\SCConnect as Connect;
-    echo 'Please Log In';
 ?>
-
-<!-- This is the sidebar, which I don't need here
-            <br>
- Dropdown Products 
-            <div class="dropdown">
-                <button class="dropbutton">Products</button>
-                <div class="dropcontent">
-                    <a href="searchproduct.php">Product Search</a>
-                    <a href="addproduct.php">Add Product</a>
-                </div>
-            </div>
-
- Dropdown Commodities
-
-            <div class="dropdown">
-                <button class="dropbutton">Commodities</button>
-                <div class="dropcontent">
-                    <a href="searchcommodity.php">Commodity Search</a>
-                    <a href="addcommodity.php">Add Commodity</a>
-                </div>
-            </div>
-
-Hyperlinks
-
-            <div class="dropdown">
-                <a href="recentsearches.php"><button class="dropbutton">Recent Searches</button></a>
-            </div>
-            <div class="dropdown">
-                <a href="logout.php"><button class="dropbutton">Logout</button></a>
-            </div>
--->
-        </div>
-
-        <br>
-
+    <br>
         <div class="main">
             <h1>Should-Cost Login</h1>
             <div class="noborder"> 
@@ -94,7 +54,7 @@ Hyperlinks
                 </form>
                 <div class="noborder">
                     <br> 
-	            <a class="nav-item nav-link text-dark" href="createuser.php">Create User</a>
+	            <a href="createuser.php">Create User</a>
                 </div>
             </div>
     </body>
