@@ -12,6 +12,7 @@ div {
     border-radius: 6px; */
     line-height: 40px;
     margin: auto;    
+/*    box-sizing: border-box; */
 }
 div.noborder {
     border-style:none;
@@ -22,7 +23,7 @@ div.main{
     border-color: black;
     border-radius: 6px;
     min-width:500px;
-    max-width:1000px;
+    max-width:1200px;
     padding: 20px;
     margin:auto;
 }
@@ -37,12 +38,24 @@ margin: 0 auto;
 background-color: #fefefe;
 }
 
+div.table_back {
+    border-style: none;
+    max-width:1000px;
+    background-color: #f0f0f0;
+}
+
+div.totals{
+    float:bottom;
+    max-height: 50px;
+}
+
 div.sidebyside {
-padding:10px;
-float:left;
-min-width:25%;
-max-width:30%;
-background-color:skyblue;
+    padding:10px;
+    float:left;
+    min-width:20%;
+    max-width:25%;
+    text-align:center;
+    background-color:skyblue;
 }
 
 div.sidebar {
@@ -53,6 +66,12 @@ div.sidebar {
     background-color: #ffffff;
     max-width: 200px;
     text-align:center;
+}
+
+span.buttonlink{
+    padding:5px;
+    border-style: solid;
+    border:1px;
 }
 
 button.dropbutton {
@@ -66,6 +85,8 @@ button.dropbutton {
 }
 
 .dropdown {
+    border-style:solid;
+    border: 1px;
     position: relative;
     display: inline-block;
 }
@@ -93,5 +114,50 @@ button.dropbutton {
 .dropdown:hover .dropbutton {background-color: #db7093;}
 
 
+
+
+
+/*
+
+//merging the special formatting from materials.php to the style file
+//Will need to figure out how to deal with the red/yellow text
+
+From materials.php
+
+.mat_table {
+    box-sizing: border-box;
+}
+
+
+
+
+    <style>
+    *{
+        box-sizing: border-box;
+    }
+    * Create three equal columns that floats next to each other *
+    .column
+    {
+        float: left;
+        width: 33.33%;
+        padding: 10px;
+    }
+    * Clear floats after the columns *
+    .row:after
+    {
+       content: "";
+       display: table;
+       clear: both;
+    }
+    .checkmark {
+        position: absolute;
+        top: 200;
+        left: 0;
+        height: 15px;
+        width: 15px;
+    }	
+    </style>
+    <!-- End style code to move to external CSS -->
+*/
 
 

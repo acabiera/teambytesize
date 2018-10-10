@@ -1,5 +1,5 @@
 <?php
-
+//searchcommodity.php
 require 'vendor/autoload.php';
 use scservice\SCConnect as Connect;
 
@@ -9,16 +9,17 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
     header("Location: login.php");
    exit();
 }
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <title>Commodity Search</title>
-</head>
-<body>
+    <head>
+        <link rel="stylesheet" type="text/css" href="scstyle_01.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <title>Should-Cost: Commodity Search</title>
+    </head>
+    <body>
 <?php
 
     //Query database and store product names in an array
@@ -35,78 +36,40 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
             $commStm=null;
         }catch(\PDOException $e){
     echo "<script> window.alert('There was an exception found while attempting the autocomplete script.') </script>";
-}
+    }  
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-<?php echo $_SESSION['username']; ?>
-
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <ul class="navbar-nav">
-
-<!-- Dropdown Products -->
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Products
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="searchproduct.php">Product Search</a>
-          <a class="dropdown-item" href="addproduct.php">Add Product</a>
+        <div class="sidebar">
+<?php echo $_SESSION['username'];
+include "sidebar.php";
+?>
         </div>
-      </li>
 
-<!-- Dropdown Commodities -->
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Commodities
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="searchcommodity.php">Commodity Search</a>
-          <a class="dropdown-item" href="addcommodity.php">Add Commodity</a>
-        </div>
-      </li>
-
-<!-- Hyperlinks -->
-      <a class="nav-item nav-link text-white" href="recentsearches.php">Recent Searches</a>
-     <a class="nav-item nav-link text-white" href="logout.php">Logout</a>
-    </ul>
-    </div>
-  </div>
-</nav>
-<br>
-<center>
-<div class="card bg-primary" style="width: 50rem;">
-    <br>
-    <div class="h1 card-title">Commodity Search</div>
-
-        <div class="card-body">
-            <p>Search for the commodity below to view its information.
+        <div class="main">
+            <h1>Search Commodity</h1>
+            Search for the commodity below to view its information.
             <br>
-            <?php
-            //Set flag to enable searches to be stored in the database
-            $_SESSION['issearch'] = true;
-
-            if (isset($_SESSION['noterm'])){
-                if ($_SESSION['noterm']){
-                   echo "<script type='text/javascript'>alert('Your search commodity is not in the database. Please add, or try a different term.');</script>";
-                   //Reset flag to false after it returns the message
-                   unset($_SESSION['noterm']);
-                   unset($_SESSION['incorrectterm']);
-                }
-            }
-            ?>
-            </p>
-            <form action="commodityinfo.php"  autocomplete="off" method="GET">
-                <input type="text" class="form-control" style="width:85%;float:left;" id ="commoditysearch" name="commoditysearch" onChange="createList()" placeholder="Enter Commodity to Search">
-                <button type="submit" class="border btn btn-primary border-dark text-dark">Search</button>
-                <div style="width:85%; background-color:white; clear:both; float:left;" id="completeContainer"/> 
-           </form>
+<?php
+    //Set flag to enable searches to be stored in the database
+    $_SESSION['issearch'] = true;
+    if (isset($_SESSION['noterm'])){
+        if ($_SESSION['noterm']){
+            echo "<script type='text/javascript'>alert('Your search commodity is not in the database. Please add, or try a different term.');</script>";
+            //Reset flag to false after it returns the message
+            unset($_SESSION['noterm']);
+            unset($_SESSION['incorrectterm']);
+        }
+    }
+?>
+            <div class="noborder">           
+                <form action="commodityinfo.php"  autocomplete="off" method="GET">
+                    <input type="text"  id ="commoditysearch" name="commoditysearch" onChange="createList()" placeholder="Enter Commodity to Search">
+                    <button type="submit">Search</button>
+                    <div id="completeContainer"/> 
+               </form>
+            </div>
         </div>
-        <br>
+    <br>
 
 
 <script language="javascript">
@@ -164,7 +127,7 @@ if(!(isset($_SESSION)) ||!($_SESSION['valid'])){
          removeSuggest();
      });
 </script>
-    </center>
+
 
 </body>
 </html>
