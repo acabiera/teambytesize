@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>Should-Cost Extended Development: March 21st 2019</title>
+        <link rel="stylesheet" href="style01.css">
+    </head>
+    <body>
+        <h1>Should-Cost Analysis Extended Development: Update (3/21/2019)</h1>
+
+        <div>
+
+            <p>I know that I recently posted a hiatus notice - and yes, it was belated, because I have been distracted by other things. But I'm trying to recreate my development environment now to see if I can get started again.  (The problem I was having was with the VM I had been using; I've since switched software and moved to my desktop, and it is working well so far.) So I've deleted the notice and am going to get started on (at least) monthly updates.
+            <p>A few new features I want to include, and pitfalls that I know I need to deal with: 
+                <ul>
+                    <li>The PDO driver has to be configured for all of the databases you plan to use. (For me that's still mostly PostgreSQL.)
+                    <li>Install Composer. It's not strictly necessary but it was very helpful.
+                    <li>This time, start with *at least* the user tables secured. The cryptographic functions with PostgreSQL are a good start. 
+                    <li>I don't currently have a server to upload this to for a live test. When I do, I'll switch over to HTTPS; I know there are some extra steps and certifications to obtain.
+                </ul>
+            </p>
+<p>I have several next steps to take; I am trying to decide what order to tackle them in. For instance, I definitely want to refine the dropdown menus, make them pop up in exactly the right place. This is a common and somewhat annoying CSS issue, judging from the research I've done.</p>
+
+<p>Secondly, and more importantly, I want to create different levels of access. Basic users - the most common role - would simply be able to view information and request information that is not already there. Admins would be able to alter user information - delete inactive user logins and track when people have logged into the app. And I don't have a name for the third role yet - I'm thinking Researcher - but it will be a role that can add, edit and delete products and commodities themselves. When we started this project we saw examples of a company going to an outside researcher to find out exactly what was in an item. I want a role to enable that.I cannot currently work on this with the tools that I have now. I no longer have access to a web server that I can use to make sure that the various site features work, or to hold the database that I would need to retrieve and test data.</p>   
+        </div>
+    </body>
+</html>
